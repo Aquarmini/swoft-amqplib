@@ -16,7 +16,7 @@ class AmqpTest extends AbstractTestCase
     public function testSendMessage()
     {
         $msg = new DemoMessage();
-
+        $msg->setData(['id' => 1]);
         $msg->publish();
     }
 }

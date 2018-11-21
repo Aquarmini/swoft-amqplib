@@ -47,34 +47,44 @@ class Connection
         return $this;
     }
 
+    public function check(): bool
+    {
+        return $this->connection->isConnected();
+    }
+
+    public function reconnect()
+    {
+        return $this->connection->reconnect();
+    }
+
     /**
-     * @return mixed
+     * @return AbstractConnection
      */
-    public function getConnection()
+    public function getConnection(): AbstractConnection
     {
         return $this->connection;
     }
 
     /**
-     * @param mixed $connection
+     * @param AbstractConnection $connection
      */
-    public function setConnection($connection)
+    public function setConnection(AbstractConnection $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAdapter()
+    public function getAdapter(): string
     {
         return $this->adapter;
     }
 
     /**
-     * @param mixed $adapter
+     * @param string $adapter
      */
-    public function setAdapter($adapter)
+    public function setAdapter(string $adapter)
     {
         $this->adapter = $adapter;
     }

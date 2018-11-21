@@ -5,9 +5,9 @@ namespace SwoftTest\Testing;
 
 
 use Swoftx\Amqplib\Connection;
-use Swoftx\Amqplib\Message\Message;
+use Swoftx\Amqplib\Message\Publisher;
 
-class DemoMessage extends Message
+class DemoMessage extends Publisher
 {
     protected $exchange = 'demo';
 

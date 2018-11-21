@@ -1,30 +1,29 @@
 <?php
 
-
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPSwooleConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 use Swoftx\Amqplib\Connection;
+use Swoftx\Amqplib\Exceptions\MessageException;
+use Swoftx\Amqplib\Packer\JsonPacker;
+use Swoftx\Amqplib\Packer\PackerInterface;
 
-abstract class Message implements MessageInterface
+abstract class Message
 {
     protected $exchange;
 
     protected $queue;
 
-    protected $routingKey;
+    protected $routingKey = '';
 
     protected $type = 'topic';
 
     /** @var AMQPChannel */
     protected $channel;
 
-    protected $properties = [
-        'content_type' => 'text/plain',
-        'delivery_mode' => 2
-    ];
+    /** @var PackerInterface */
+    protected $packer;
 
     /**
      * 拿到单例的Connection
@@ -33,8 +32,10 @@ abstract class Message implements MessageInterface
      */
     abstract public function getConnection(): Connection;
 
-    public function declare()
+    public function __construct()
     {
+        $this->check();
+
         if (!isset($this->channel)) {
             /** @var AMQPSwooleConnection $conn */
             $conn = $this->getConnection()->getConnection();
@@ -50,12 +51,39 @@ abstract class Message implements MessageInterface
         $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
     }
 
-    public function publish()
+    protected function check()
     {
-        $this->declare();
+        if (!isset($this->exchange)) {
+            throw new MessageException('exchange is required!');
+        }
 
-        $body = $this->message();
-        $msg = new AMQPMessage($body, $this->properties);
-        $this->channel->basic_publish($msg, $this->exchange, $this->routingKey);
+        if (!isset($this->type)) {
+            throw new MessageException('type is required!');
+        }
+
+        if (!isset($this->queue)) {
+            throw new MessageException('queue is required!');
+        }
+
+        if (!isset($this->routingKey)) {
+            throw new MessageException('routingKey is required!');
+        }
+    }
+
+    /**
+     * @return PackerInterface
+     */
+    public function getPacker(): PackerInterface
+    {
+        return $this->packer ?? new JsonPacker();
+    }
+
+    /**
+     * @param PackerInterface $packer
+     */
+    public function setPacker(PackerInterface $packer)
+    {
+        $this->packer = $packer;
+        return $this;
     }
 }
