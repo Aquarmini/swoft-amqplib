@@ -1,0 +1,35 @@
+{
+    "name": "limingxinleo/swoft-amqplib",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "component"
+    ],
+    "description": "Amqplib简单封装组件",
+    "authors": [
+        {
+            "name": "李铭昕",
+            "email": "limingxin@swoft.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Swoftx\\Amqplib\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SwoftTest\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "swoft/framework": "^1.0.24"
+    },
+    "require-dev": {
+        "swoft/swoole-ide-helper": "dev-master",
+        "phpunit/phpunit": "^5.7",
+        "phpstan/phpstan": "^0.10.5"
+    }
+}
