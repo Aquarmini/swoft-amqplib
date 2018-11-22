@@ -39,7 +39,7 @@ install:
   - composer install --prefer-dist --optimize-autoloader
   - sleep 5
   # 启动消费脚本
-  - php tests/consumer.php
+  - php tests/consumer.php &
   - sleep 5
 
 script:
