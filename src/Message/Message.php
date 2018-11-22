@@ -62,7 +62,7 @@ abstract class Message
             $this->channel->queue_declare($this->queue, false, true, false, false, false, $header);
             $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
 
-            $key = sprintf("%s:%s:%s:%s", $this->exchange, $this->type, $this->queue, $this->routingKey);
+            $key = sprintf('%s:%s:%s:%s', $this->exchange, $this->type, $this->queue, $this->routingKey);
             $this->getCacheManager()->set($key, 1);
         }
     }
@@ -105,7 +105,7 @@ abstract class Message
      */
     protected function isDeclare()
     {
-        $key = sprintf("%s:%s:%s:%s", $this->exchange, $this->type, $this->queue, $this->routingKey);
+        $key = sprintf('%s:%s:%s:%s', $this->exchange, $this->type, $this->queue, $this->routingKey);
         if ($this->getCacheManager()->has($key)) {
             return true;
         }
