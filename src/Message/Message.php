@@ -22,11 +22,9 @@ abstract class Message
 {
     protected $exchange;
 
-    protected $queue;
+    protected $type = 'topic';
 
     protected $routingKey = '';
-
-    protected $type = 'topic';
 
     /** @var AMQPChannel */
     protected $channel;
@@ -53,18 +51,7 @@ abstract class Message
             $this->channel = $conn->channel();
         }
 
-        if (!$this->isDeclare()) {
-            $this->channel->exchange_declare($this->exchange, $this->type, false, true, false);
-
-            $header = [
-                'x-ha-policy' => ['S', 'all']
-            ];
-            $this->channel->queue_declare($this->queue, false, true, false, false, false, $header);
-            $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
-
-            $key = sprintf('%s:%s:%s:%s', $this->exchange, $this->type, $this->queue, $this->routingKey);
-            $this->getCacheManager()->set($key, 1);
-        }
+        $this->declare();
     }
 
     /**
@@ -72,7 +59,9 @@ abstract class Message
      * @author limx
      * @return Connection
      */
-    abstract public function getConnection(): Connection;
+    abstract protected function getConnection(): Connection;
+
+    abstract protected function declare();
 
     /**
      * 检验消息队列配置是否合法
@@ -89,27 +78,9 @@ abstract class Message
             throw new MessageException('type is required!');
         }
 
-        if (!isset($this->queue)) {
-            throw new MessageException('queue is required!');
-        }
-
         if (!isset($this->routingKey)) {
             throw new MessageException('routingKey is required!');
         }
-    }
-
-    /**
-     * 是否已经声明过exchange、queue并进行绑定
-     * @author limx
-     * @return bool
-     */
-    protected function isDeclare()
-    {
-        $key = sprintf('%s:%s:%s:%s', $this->exchange, $this->type, $this->queue, $this->routingKey);
-        if ($this->getCacheManager()->has($key)) {
-            return true;
-        }
-        return false;
     }
 
     /**

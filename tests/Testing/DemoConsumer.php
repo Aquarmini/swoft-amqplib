@@ -30,7 +30,7 @@ class DemoConsumer extends Consumer
         return true;
     }
 
-    public function getConnection(): Connection
+    protected function getConnection(): Connection
     {
         return \SwoftTest\Testing\Connection::getInstance()->build();
     }

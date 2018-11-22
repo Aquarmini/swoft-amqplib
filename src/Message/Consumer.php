@@ -14,6 +14,8 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 abstract class Consumer extends Message implements ConsumerInterface
 {
+    protected $queue;
+
     protected $status = true;
 
     protected $signals = [
@@ -89,5 +91,49 @@ abstract class Consumer extends Message implements ConsumerInterface
     public function signalHandler()
     {
         $this->status = false;
+    }
+
+    /**
+     * 检验消息队列配置是否合法
+     * @author limx
+     * @throws MessageException
+     */
+    protected function check()
+    {
+        if (!isset($this->queue)) {
+            throw new MessageException('queue is required!');
+        }
+
+        parent::check();
+    }
+
+    protected function declare()
+    {
+        if (!$this->isDeclare()) {
+            $this->channel->exchange_declare($this->exchange, $this->type, false, true, false);
+
+            $header = [
+                'x-ha-policy' => ['S', 'all']
+            ];
+            $this->channel->queue_declare($this->queue, false, true, false, false, false, $header);
+            $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
+
+            $key = sprintf('consumer:%s:%s:%s:%s', $this->exchange, $this->type, $this->queue, $this->routingKey);
+            $this->getCacheManager()->set($key, 1);
+        }
+    }
+
+    /**
+     * 是否已经声明过exchange、queue并进行绑定
+     * @author limx
+     * @return bool
+     */
+    protected function isDeclare()
+    {
+        $key = sprintf('consumer:%s:%s:%s:%s', $this->exchange, $this->type, $this->queue, $this->routingKey);
+        if ($this->getCacheManager()->has($key)) {
+            return true;
+        }
+        return false;
     }
 }

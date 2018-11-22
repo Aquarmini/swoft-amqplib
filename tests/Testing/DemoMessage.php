@@ -27,7 +27,7 @@ class DemoMessage extends Publisher
         parent::__construct();
     }
 
-    public function getConnection(): Connection
+    protected function getConnection(): Connection
     {
         return \SwoftTest\Testing\Connection::getInstance()->build();
     }

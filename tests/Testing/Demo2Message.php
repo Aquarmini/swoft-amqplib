@@ -21,7 +21,7 @@ class Demo2Message extends Publisher
 
     protected $routingKey = 'test';
 
-    public function getConnection(): Connection
+    protected function getConnection(): Connection
     {
         return \SwoftTest\Testing\Connection::getInstance()->build();
     }
