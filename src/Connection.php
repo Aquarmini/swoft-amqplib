@@ -22,7 +22,7 @@ class Connection
     /** @var string */
     protected $adapter;
 
-    /** @var Config */
+    /** @var ConfigInterface */
     protected $config;
 
     public static function make()
@@ -36,7 +36,7 @@ class Connection
             return $this;
         }
 
-        if (!isset($this->config)) {
+        if (!isset($this->config) || !$this->config instanceof ConfigInterface) {
             $this->config = new Config();
         }
 
@@ -104,15 +104,15 @@ class Connection
     /**
      * @return Config
      */
-    public function getConfig(): Config
+    public function getConfig(): ConfigInterface
     {
         return $this->config;
     }
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      */
-    public function setConfig(Config $config)
+    public function setConfig(ConfigInterface $config)
     {
         $this->config = $config;
     }

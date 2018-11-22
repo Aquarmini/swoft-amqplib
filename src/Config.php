@@ -10,7 +10,7 @@
 
 namespace Swoftx\Amqplib;
 
-class Config
+class Config implements ConfigInterface
 {
     protected $host;
 
