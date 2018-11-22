@@ -23,12 +23,15 @@ class DemoConsumer extends Consumer
 
     public function handle($data): bool
     {
-        var_dump($data);
+        $id = $data['id'];
+
+        file_put_contents(TESTS_PATH . '/' . $id, $id);
+
         return true;
     }
 
     public function getConnection(): Connection
     {
-        return (new \Swoftx\Amqplib\Connection())->build();
+        return \SwoftTest\Testing\Connection::getInstance()->build();
     }
 }

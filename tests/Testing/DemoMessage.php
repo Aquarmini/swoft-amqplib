@@ -23,6 +23,6 @@ class DemoMessage extends Publisher
 
     public function getConnection(): Connection
     {
-        return (new \Swoftx\Amqplib\Connection())->build();
+        return \SwoftTest\Testing\Connection::getInstance()->build();
     }
 }

@@ -8,3 +8,5 @@
  * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
  */
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+
+define('TESTS_PATH', __DIR__);

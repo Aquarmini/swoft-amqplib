@@ -16,6 +16,12 @@ abstract class Consumer extends Message implements ConsumerInterface
 {
     protected $status = true;
 
+    protected $signals = [
+        SIGQUIT,
+        SIGTERM,
+        SIGTSTP
+    ];
+
     abstract public function handle($data): bool;
 
     public function callback(AMQPMessage $msg)
@@ -39,9 +45,9 @@ abstract class Consumer extends Message implements ConsumerInterface
     {
         pcntl_async_signals(true);
 
-        pcntl_signal(SIGQUIT, [$this, 'signalHandler']);
-        pcntl_signal(SIGTERM, [$this, 'signalHandler']);
-        pcntl_signal(SIGTSTP, [$this, 'signalHandler']);
+        foreach ($this->signals as $signal) {
+            pcntl_signal($signal, [$this, 'signalHandler']);
+        }
 
         $this->channel->basic_consume(
             $this->queue,
@@ -74,6 +80,10 @@ abstract class Consumer extends Message implements ConsumerInterface
         $this->channel->basic_reject($msg->delivery_info['delivery_tag'], true);
     }
 
+    /**
+     * 信号处理器
+     * @author limx
+     */
     public function signalHandler()
     {
         $this->status = false;

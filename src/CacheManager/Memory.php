@@ -24,7 +24,7 @@ class Memory implements CacheInterface
         static::$data[$key] = $value;
     }
 
-    public function get($key, $value, $default)
+    public function get($key, $default = null)
     {
         return static::$data[$key] ?? $default;
     }

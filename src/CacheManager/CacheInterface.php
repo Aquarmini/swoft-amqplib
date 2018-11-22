@@ -14,7 +14,7 @@ interface CacheInterface
 {
     public function set($key, $value);
 
-    public function get($key, $value, $default);
+    public function get($key, $default = null);
 
     public function has($key): bool;
 }

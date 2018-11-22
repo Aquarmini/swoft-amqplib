@@ -25,6 +25,11 @@ class Connection
     /** @var Config */
     protected $config;
 
+    public static function make()
+    {
+        return new static();
+    }
+
     public function build()
     {
         if ($this->connection instanceof AbstractConnection && $this->connection->isConnected()) {
