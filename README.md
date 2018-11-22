@@ -46,6 +46,7 @@ Swoft 框架
 
 use Swoftx\Amqplib\Connection;
 use Swoftx\Amqplib\Message\Publisher;
+use Swoft\Bean\Annotation\Bean;
 
 /**
  * @Bean
