@@ -11,6 +11,7 @@
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Message\AMQPMessage;
+use Swoftx\Amqplib\Exceptions\MessageException;
 
 abstract class Consumer extends Message implements ConsumerInterface
 {
