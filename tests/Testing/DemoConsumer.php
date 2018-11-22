@@ -11,15 +11,21 @@
 namespace SwoftTest\Testing;
 
 use Swoftx\Amqplib\Connection;
-use Swoftx\Amqplib\Message\Publisher;
+use Swoftx\Amqplib\Message\Consumer;
 
-class DemoMessage extends Publisher
+class DemoConsumer extends Consumer
 {
     protected $exchange = 'demo';
 
     protected $queue = 'demo.queue';
 
     protected $routingKey = 'test';
+
+    public function handle($data): bool
+    {
+        var_dump($data);
+        return true;
+    }
 
     public function getConnection(): Connection
     {

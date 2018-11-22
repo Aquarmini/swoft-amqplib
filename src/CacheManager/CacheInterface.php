@@ -8,10 +8,13 @@
  * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
  */
 
-namespace Swoftx\Amqplib\Exceptions;
+namespace Swoftx\Amqplib\CacheManager;
 
-use Exception;
-
-class MessageException extends Exception
+interface CacheInterface
 {
+    public function set($key, $value);
+
+    public function get($key, $value, $default);
+
+    public function has($key): bool;
 }

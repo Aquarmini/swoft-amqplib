@@ -8,10 +8,14 @@
  * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
  */
 
-namespace Swoftx\Amqplib\Exceptions;
+namespace Swoftx\Amqplib\Message;
 
-use Exception;
-
-class MessageException extends Exception
+interface ConsumerInterface
 {
+    /**
+     * 推送消息
+     * @author limx
+     * @return mixed
+     */
+    public function consume();
 }

@@ -1,12 +1,14 @@
 <?php
-
+/**
+ * This file is part of Swoft.
+ *
+ * @link     https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact  limingxin@swoft.org
+ * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
+ */
 require_once __DIR__ . '/bootstrap.php';
 
-/** @var \PhpAmqpLib\Connection\AMQPSwooleConnection $conn */
-$conn = (new \Swoftx\Amqplib\Connection())->build()->getConnection();
+$consumer = new \SwoftTest\Testing\DemoConsumer();
 
-$conn->channel();
-
-go(function () {
-    \co::sleep(1000);
-});
+$consumer->consume();

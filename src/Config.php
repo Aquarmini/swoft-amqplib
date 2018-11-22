@@ -1,15 +1,25 @@
 <?php
-
+/**
+ * This file is part of Swoft.
+ *
+ * @link     https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact  limingxin@swoft.org
+ * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
+ */
 
 namespace Swoftx\Amqplib;
-
 
 class Config
 {
     protected $host;
+
     protected $port;
+
     protected $user;
+
     protected $password;
+
     protected $vhost;
 
     public function __construct($host = '127.0.0.1', $port = 5672, $user = 'guest', $password = 'guest', $vhost = '/')

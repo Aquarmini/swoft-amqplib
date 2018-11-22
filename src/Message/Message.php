@@ -1,9 +1,18 @@
 <?php
-
+/**
+ * This file is part of Swoft.
+ *
+ * @link     https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact  limingxin@swoft.org
+ * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
+ */
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPSwooleConnection;
+use Swoftx\Amqplib\CacheManager\CacheInterface;
+use Swoftx\Amqplib\CacheManager\Memory;
 use Swoftx\Amqplib\Connection;
 use Swoftx\Amqplib\Exceptions\MessageException;
 use Swoftx\Amqplib\Packer\JsonPacker;
@@ -25,12 +34,8 @@ abstract class Message
     /** @var PackerInterface */
     protected $packer;
 
-    /**
-     * 拿到单例的Connection
-     * @author limx
-     * @return Connection
-     */
-    abstract public function getConnection(): Connection;
+    /** @var CacheInterface */
+    protected $cacheManager;
 
     public function __construct()
     {
@@ -42,15 +47,32 @@ abstract class Message
             $this->channel = $conn->channel();
         }
 
-        $this->channel->exchange_declare($this->exchange, $this->type, false, true, false);
+        if (!$this->isDeclare()) {
+            $this->channel->exchange_declare($this->exchange, $this->type, false, true, false);
 
-        $header = [
-            'x-ha-policy' => ['S', 'all']
-        ];
-        $this->channel->queue_declare($this->queue, false, true, false, false, false, $header);
-        $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
+            $header = [
+                'x-ha-policy' => ['S', 'all']
+            ];
+            $this->channel->queue_declare($this->queue, false, true, false, false, false, $header);
+            $this->channel->queue_bind($this->queue, $this->exchange, $this->routingKey);
+
+            $key = sprintf("%s:%s:%s:%s", $this->exchange, $this->type, $this->queue, $this->routingKey);
+            $this->getCacheManager()->set($key, 1);
+        }
     }
 
+    /**
+     * 拿到单例的Connection
+     * @author limx
+     * @return Connection
+     */
+    abstract public function getConnection(): Connection;
+
+    /**
+     * 检验消息队列配置是否合法
+     * @author limx
+     * @throws MessageException
+     */
     protected function check()
     {
         if (!isset($this->exchange)) {
@@ -71,6 +93,20 @@ abstract class Message
     }
 
     /**
+     * 是否已经声明过exchange、queue并进行绑定
+     * @author limx
+     * @return bool
+     */
+    protected function isDeclare()
+    {
+        $key = sprintf("%s:%s:%s:%s", $this->exchange, $this->type, $this->queue, $this->routingKey);
+        if ($this->getCacheManager()->has($key)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @return PackerInterface
      */
     public function getPacker(): PackerInterface
@@ -84,6 +120,23 @@ abstract class Message
     public function setPacker(PackerInterface $packer)
     {
         $this->packer = $packer;
+        return $this;
+    }
+
+    /**
+     * @return CacheInterface
+     */
+    public function getCacheManager(): CacheInterface
+    {
+        return $this->cacheManager ?? new Memory();
+    }
+
+    /**
+     * @param CacheInterface $cacheManager
+     */
+    public function setCacheManager(CacheInterface $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
         return $this;
     }
 }
