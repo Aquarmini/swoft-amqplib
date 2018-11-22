@@ -11,6 +11,7 @@
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Message\AMQPMessage;
+use Swoftx\Amqplib\Constants;
 use Swoftx\Amqplib\Exceptions\MessageException;
 
 abstract class Publisher extends Message implements PublisherInterface
@@ -19,7 +20,7 @@ abstract class Publisher extends Message implements PublisherInterface
 
     protected $properties = [
         'content_type' => 'text/plain',
-        'delivery_mode' => 2
+        'delivery_mode' => Constants::DELIVERY_MODE_PERSISTENT
     ];
 
     public function publish()
