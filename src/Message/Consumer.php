@@ -62,6 +62,8 @@ abstract class Consumer extends Message implements ConsumerInterface
         while ($this->status && count($this->channel->callbacks) > 0) {
             $this->channel->wait();
         }
+
+        $this->channel->close();
     }
 
     /**

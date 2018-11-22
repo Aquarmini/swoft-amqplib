@@ -53,5 +53,6 @@ abstract class Publisher extends Message implements PublisherInterface
     public function setData($data)
     {
         $this->data = $data;
+        return $this;
     }
 }

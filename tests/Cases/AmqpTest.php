@@ -9,6 +9,7 @@
  */
 namespace SwoftTest\Cases;
 
+use SwoftTest\Testing\Demo2Message;
 use SwoftTest\Testing\DemoMessage;
 use Swoftx\Amqplib\CacheManager\Memory;
 
@@ -17,9 +18,21 @@ class AmqpTest extends AbstractTestCase
     public function testSendMessage()
     {
         $id = uniqid();
-        $msg = new DemoMessage();
-        $msg->setData(['id' => $id]);
+        DemoMessage::make($id)->publish();
+        sleep(1);
+        $res = file_get_contents(TESTS_PATH . '/' . $id);
+        $this->assertEquals($id, $res);
+
+        $id = uniqid();
+        $msg = new DemoMessage($id);
         $msg->publish();
+
+        sleep(1);
+        $res = file_get_contents(TESTS_PATH . '/' . $id);
+        $this->assertEquals($id, $res);
+
+        $id = uniqid();
+        Demo2Message::make()->setData(['id' => $id])->publish();
 
         sleep(1);
         $res = file_get_contents(TESTS_PATH . '/' . $id);

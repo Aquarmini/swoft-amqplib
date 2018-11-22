@@ -37,6 +37,12 @@ abstract class Message
     /** @var CacheInterface */
     protected $cacheManager;
 
+    public static function make()
+    {
+        $args = func_get_args();
+        return new static(...$args);
+    }
+
     public function __construct()
     {
         $this->check();
