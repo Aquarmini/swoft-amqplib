@@ -47,4 +47,15 @@ class AmqpTest extends AbstractTestCase
         $this->assertTrue($cache->has('xxxxxx'));
         $this->assertEquals(1, $cache->get('xxxxxx'));
     }
+
+    public function testConsumerThrowException()
+    {
+        $id = uniqid();
+        Demo2Message::make()->setData(['id' => $id, 'reject' => true])->publish();
+
+        sleep(1);
+        $res = file_get_contents(TESTS_PATH . '/' . $id . 'reject');
+        $this->assertEquals($id, $res);
+
+    }
 }

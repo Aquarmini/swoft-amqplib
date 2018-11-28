@@ -19,6 +19,8 @@ abstract class Consumer extends Message implements ConsumerInterface
 
     protected $status = true;
 
+    protected $requeue = true;
+
     protected $signals = [
         SIGQUIT,
         SIGTERM,
@@ -40,7 +42,7 @@ abstract class Consumer extends Message implements ConsumerInterface
                 $this->reject($msg);
             }
         } catch (\Throwable $ex) {
-            $this->reject($msg);
+            $this->catch($ex, $data, $msg);
         }
     }
 
@@ -72,7 +74,7 @@ abstract class Consumer extends Message implements ConsumerInterface
     /**
      * 消费成功应答
      */
-    public function ack(AMQPMessage $msg)
+    protected function ack(AMQPMessage $msg)
     {
         $this->channel->basic_ack($msg->delivery_info['delivery_tag']);
     }
@@ -80,9 +82,18 @@ abstract class Consumer extends Message implements ConsumerInterface
     /**
      * 当前消费者拒绝处理
      */
-    public function reject(AMQPMessage $msg)
+    protected function reject(AMQPMessage $msg)
     {
-        $this->channel->basic_reject($msg->delivery_info['delivery_tag'], true);
+        $this->channel->basic_reject($msg->delivery_info['delivery_tag'], $this->requeue);
+    }
+
+    /**
+     * 异常捕获
+     * @param \Throwable $ex
+     */
+    protected function catch(\Throwable $ex, $data, AMQPMessage $msg)
+    {
+        return $this->reject($msg);
     }
 
     /**
