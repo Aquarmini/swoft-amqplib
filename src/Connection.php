@@ -80,6 +80,11 @@ class Connection
         return $this->connection->reconnect();
     }
 
+    public function close()
+    {
+        return $this->connection->close();
+    }
+
     public function getChannelId()
     {
         return ++$this->channelId;
