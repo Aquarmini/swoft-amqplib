@@ -44,7 +44,7 @@ class Connection
             $this->config = new Config();
         }
 
-        if (!isset($this->params) || $this->params instanceof Params) {
+        if (!isset($this->params) || !$this->params instanceof Params) {
             $this->params = new Params();
         }
 
