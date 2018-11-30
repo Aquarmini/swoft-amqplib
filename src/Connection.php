@@ -29,6 +29,9 @@ class Connection
     /** @var Params */
     protected $params;
 
+    /** @var int */
+    protected $lastSendTime = null;
+
     public static function make()
     {
         return new static();
@@ -36,7 +39,7 @@ class Connection
 
     public function build()
     {
-        if ($this->connection instanceof AbstractConnection && $this->connection->isConnected()) {
+        if ($this->connection instanceof AbstractConnection && !$this->isHeartbeatTimeout()) {
             return $this;
         }
 
@@ -71,6 +74,25 @@ class Connection
     public function reconnect()
     {
         return $this->connection->reconnect();
+    }
+
+    public function isHeartbeatTimeout(): bool
+    {
+        if ($this->params->getHeartbeat() === 0) {
+            return false;
+        }
+
+        $lastSendTime = $this->lastSendTime;
+        $currentTime = microtime(true);
+        $this->lastSendTime = $currentTime;
+
+        if (isset($this->lastSendTime) && $this->lastSendTime > 0) {
+            if ($currentTime - $lastSendTime > $this->params->getHeartbeat()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
