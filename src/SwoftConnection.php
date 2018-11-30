@@ -35,6 +35,11 @@ class SwoftConnection extends AbstractConnection
         $this->connection = $conn->build();
     }
 
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
     public function reconnect()
     {
         if (isset($this->connection)) {

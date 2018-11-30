@@ -44,85 +44,9 @@ Swoft 框架
 ~~~php
 <?php
 
-use Swoft\Bean\Annotation\Bean;
-use Swoft\Bean\Annotation\Inject;
-use Swoftx\Amqplib\Connection as AmqpConnection;
-
-/**
- * @Bean
- */
-class SwoftConnection extends AmqpConnection
-{
-    /**
-     * @Inject
-     * @var Config
-     */
-    protected $config;
-}
-
-use Swoftx\Amqplib\ConfigInterface;
-use Swoft\Bean\Annotation\Value;
-
-/**
- * @Bean
- */
-class Config implements ConfigInterface
-{
-    /**
-     * @Value(env="${AMQP_HOST}")
-     * @var string
-     */
-    protected $host = '127.0.0.1';
-
-    /**
-     * @Value(env="${AMQP_PORT}")
-     * @var integer
-     */
-    protected $port = 5672;
-
-    /**
-     * @Value(env="${AMQP_USER}")
-     * @var string
-     */
-    protected $user = 'guest';
-
-    /**
-     * @Value(env="${AMQP_PASSWORD}")
-     * @var string
-     */
-    protected $password = 'guest';
-
-    /**
-     * @Value(env="${AMQP_VHOST}")
-     * @var string
-     */
-    protected $vhost = '/';
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getPort(): int
-    {
-        return $this->port;
-    }
-
-    public function getUser(): string
-    {
-        return $this->user;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function getVhost(): string
-    {
-        return $this->vhost;
-    }
-}
+use Swoftx\Amqplib\Message\Publisher;
+use Swoftx\Amqplib\SwoftConnection;
+use Swoftx\Amqplib\Pool\RabbitMQPool;
 
 class DemoMessage extends Publisher
 {
@@ -132,9 +56,12 @@ class DemoMessage extends Publisher
 
     protected $routingKey = 'test';
 
-    public function getConnection(): Connection
+    public function getConnection(): \Swoftx\Amqplib\Connection
     {
-        return bean(SwoftConnection::class)->build();
+        $pool = \Swoft\App::getPool(RabbitMQPool::class);
+        /** @var SwoftConnection $connection */
+        $connection = $pool->getConnection();
+        return $connection->getConnection();
     }
 }
 
