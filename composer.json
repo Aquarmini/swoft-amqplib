@@ -26,7 +26,7 @@
     "require": {
         "php": ">=7.1",
         "ext-pcntl": "*",
-        "swoft/php-amqplib": "^2.7"
+        "php-amqplib/php-amqplib": "^2.7"
     },
     "require-dev": {
         "swoft/swoole-ide-helper": "dev-master",

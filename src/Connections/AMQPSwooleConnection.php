@@ -10,7 +10,6 @@
 namespace Swoftx\Amqplib\Connections;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Wire\IO\SwooleIO;
 
 class AMQPSwooleConnection extends AbstractConnection
 {
