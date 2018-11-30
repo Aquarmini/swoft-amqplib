@@ -30,7 +30,6 @@ class SwooleAdapter implements AdapterInterface
             $params->getLocale(),
             $params->getConnectionTimeout(),
             $params->getReadWriteTimeout(),
-            $params->getContext(),
             $params->isKeepalive(),
             $params->getHeartbeat()
         );

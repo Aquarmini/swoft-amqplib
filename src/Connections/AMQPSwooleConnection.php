@@ -41,10 +41,10 @@ class AMQPSwooleConnection extends AbstractConnection
         $locale = 'en_US',
         $connection_timeout = 3.0,
         $read_write_timeout = 3.0,
-        $context = null,
         $keepalive = false,
         $heartbeat = 0
-    ) {
+    )
+    {
         $io = new SwooleIO($host, $port, $connection_timeout, $read_write_timeout, $keepalive, $heartbeat);
 
         parent::__construct(
@@ -56,7 +56,8 @@ class AMQPSwooleConnection extends AbstractConnection
             $login_response,
             $locale,
             $io,
-            $heartbeat
+            $heartbeat,
+            $connection_timeout
         );
     }
 }
