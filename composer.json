@@ -34,5 +34,12 @@
         "phpstan/phpstan": "^0.10.5",
         "limingxinleo/x-trait-common": "^1.1",
         "swoft/framework": "^1.0"
+    },
+    "extra": {
+        "config-plugin": {
+            "swoft.components": [
+                "config/components.php"
+            ]
+        }
     }
 }
