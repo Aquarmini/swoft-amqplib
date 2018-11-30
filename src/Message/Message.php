@@ -51,7 +51,7 @@ abstract class Message
         if (!isset($this->channel)) {
             /** @var AMQPSwooleConnection $conn */
             $this->connection = $this->getConnection()->getConnection();
-            $this->channel = $conn->channel();
+            $this->channel = $this->connection->channel();
         }
 
         $this->declare();
