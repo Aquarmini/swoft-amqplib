@@ -28,7 +28,7 @@ class Params
 
     protected $keepalive = false;
 
-    protected $heartbeat = 1;
+    protected $heartbeat = 0;
 
     /**
      * @return bool
