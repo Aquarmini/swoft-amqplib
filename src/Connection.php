@@ -42,7 +42,7 @@ class Connection
 
     public function build()
     {
-        if ($this->connection instanceof AbstractConnection && $this->connection->isConnected() && !$this->isHeartbeatTimeout()) {
+        if ($this->check()) {
             return $this;
         }
 
@@ -72,7 +72,9 @@ class Connection
 
     public function check(): bool
     {
-        return $this->connection->isConnected();
+        return $this->connection instanceof AbstractConnection
+            && $this->connection->isConnected()
+            && !$this->isHeartbeatTimeout();
     }
 
     public function reconnect()

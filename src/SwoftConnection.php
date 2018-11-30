@@ -52,11 +52,8 @@ class SwoftConnection extends AbstractConnection
         if ($lastTime + $idleTime < time()) {
             return false;
         }
-        $sock = $this->connection->getIO()->getSocket();
-        if ($sock instanceof \Swoole\Coroutine\Client) {
-            return $this->connection->isConnected() && $sock->isConnected();
-        }
-        return $this->connection->isConnected();
+
+        return $this->connection->check();
     }
 
     /**
