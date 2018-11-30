@@ -45,7 +45,11 @@ class SwoftConnection extends AbstractConnection
     public function reconnect()
     {
         if (isset($this->connection) && $this->connection instanceof Connection) {
-            $this->connection->close();
+            try {
+                $this->connection->close();
+            } catch (\Throwable $ex) {
+                // TODO: 抛出错误日志
+            }
         }
         $this->createConnection();
         return $this;
