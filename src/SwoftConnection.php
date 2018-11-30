@@ -28,9 +28,11 @@ class SwoftConnection extends AbstractConnection
         $pool = $this->getPool();
         /** @var RabbitMQPoolConfig $config */
         $config = $pool->getPoolConfig();
+        $params = bean(Params::class);
 
         $conn = new Connection();
         $conn->setConfig($config);
+        $conn->setParams($params);
 
         $this->connection = $conn->build();
     }
@@ -42,7 +44,7 @@ class SwoftConnection extends AbstractConnection
 
     public function reconnect()
     {
-        if (isset($this->connection)) {
+        if (isset($this->connection) && $this->connection instanceof Connection) {
             $this->connection->close();
         }
         $this->createConnection();
