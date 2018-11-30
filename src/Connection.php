@@ -65,7 +65,8 @@ class Connection
         /** @var AdapterInterface $adapter */
         $adapter = new $this->adapter();
         $this->connection = $adapter->initConnection($this->config, $this->params);
-
+        $this->channelId = 0;
+        
         return $this;
     }
 
