@@ -155,4 +155,20 @@ class Connection
     {
         $this->config = $config;
     }
+
+    /**
+     * @return Params
+     */
+    public function getParams(): Params
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param Params $params
+     */
+    public function setParams(Params $params)
+    {
+        $this->params = $params;
+    }
 }
