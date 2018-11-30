@@ -10,10 +10,10 @@
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPSwooleConnection;
 use Swoftx\Amqplib\CacheManager\CacheInterface;
 use Swoftx\Amqplib\CacheManager\Memory;
 use Swoftx\Amqplib\Connection;
+use Swoftx\Amqplib\Connections\AMQPSwooleConnection;
 use Swoftx\Amqplib\Exceptions\MessageException;
 use Swoftx\Amqplib\Packer\JsonPacker;
 use Swoftx\Amqplib\Packer\PackerInterface;
@@ -25,6 +25,9 @@ abstract class Message
     protected $type = 'topic';
 
     protected $routingKey = '';
+
+    /** @var AMQPSwooleConnection */
+    protected $connection;
 
     /** @var AMQPChannel */
     protected $channel;
@@ -47,7 +50,7 @@ abstract class Message
 
         if (!isset($this->channel)) {
             /** @var AMQPSwooleConnection $conn */
-            $conn = $this->getConnection()->getConnection();
+            $this->connection = $this->getConnection()->getConnection();
             $this->channel = $conn->channel();
         }
 
@@ -62,6 +65,11 @@ abstract class Message
     abstract protected function getConnection(): Connection;
 
     abstract protected function declare();
+
+    public function close()
+    {
+        $this->connection->close();
+    }
 
     /**
      * 检验消息队列配置是否合法

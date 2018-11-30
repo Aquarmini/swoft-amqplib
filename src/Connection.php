@@ -39,7 +39,7 @@ class Connection
 
     public function build()
     {
-        if ($this->connection instanceof AbstractConnection && !$this->isHeartbeatTimeout()) {
+        if ($this->connection instanceof AbstractConnection && $this->connection->isConnected() && !$this->isHeartbeatTimeout()) {
             return $this;
         }
 
