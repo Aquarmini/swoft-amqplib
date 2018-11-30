@@ -56,6 +56,5 @@ class AmqpTest extends AbstractTestCase
         sleep(1);
         $res = file_get_contents(TESTS_PATH . '/' . $id . 'reject');
         $this->assertEquals($id, $res);
-
     }
 }

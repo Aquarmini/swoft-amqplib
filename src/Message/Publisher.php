@@ -63,7 +63,6 @@ abstract class Publisher extends Message implements PublisherInterface
         return false;
     }
 
-
     /**
      * @return mixed
      */

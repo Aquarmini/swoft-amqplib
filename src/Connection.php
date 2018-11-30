@@ -10,8 +10,9 @@
 namespace Swoftx\Amqplib;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Connection\AMQPSwooleConnection;
+use Swoftx\Amqplib\Adapters\AdapterInterface;
+use Swoftx\Amqplib\Adapters\StreamAdapter;
+use Swoftx\Amqplib\Adapters\SwooleAdapter;
 use Swoole\Coroutine;
 
 class Connection
@@ -24,6 +25,9 @@ class Connection
 
     /** @var ConfigInterface */
     protected $config;
+
+    /** @var Params */
+    protected $params;
 
     public static function make()
     {
@@ -40,21 +44,21 @@ class Connection
             $this->config = new Config();
         }
 
+        if (!isset($this->params) || $this->params instanceof Params) {
+            $this->params = new Params();
+        }
+
         if (!isset($this->adapter)) {
             if (extension_loaded('swoole') && Coroutine::getuid() > 0) {
-                $this->adapter = AMQPSwooleConnection::class;
+                $this->adapter = SwooleAdapter::class;
             } else {
-                $this->adapter = AMQPStreamConnection::class;
+                $this->adapter = StreamAdapter::class;
             }
         }
 
-        $this->connection = new $this->adapter(
-            $this->config->getHost(),
-            $this->config->getPort(),
-            $this->config->getUser(),
-            $this->config->getPassword(),
-            $this->config->getVhost()
-        );
+        /** @var AdapterInterface $adapter */
+        $adapter = new $this->adapter();
+        $this->connection = $adapter->initConnection($this->config, $this->params);
 
         return $this;
     }
