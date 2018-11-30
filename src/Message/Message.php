@@ -54,7 +54,7 @@ abstract class Message
             $conn = $this->getConnection();
             $channelId = $conn->getChannelId();
             $this->connection = $conn->getConnection();
-            $this->channel = $this->connection->channel();
+            $this->channel = $this->connection->channel($channelId);
         }
 
         $this->declare();

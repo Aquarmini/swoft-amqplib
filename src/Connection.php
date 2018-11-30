@@ -66,7 +66,7 @@ class Connection
         $adapter = new $this->adapter();
         $this->connection = $adapter->initConnection($this->config, $this->params);
         $this->channelId = 0;
-        
+
         return $this;
     }
 
@@ -82,7 +82,7 @@ class Connection
 
     public function getChannelId()
     {
-        return $this->channelId++;
+        return ++$this->channelId;
     }
 
     /**
