@@ -30,7 +30,7 @@ class Connection
     protected $params;
 
     /** @var int */
-    protected $lastSendTime = null;
+    protected $lastHeartbeatTime = null;
 
     /** @var int */
     protected $channelId = 0;
@@ -72,7 +72,8 @@ class Connection
 
     public function check(): bool
     {
-        return $this->connection instanceof AbstractConnection
+        return isset($this->connection)
+            && $this->connection instanceof AbstractConnection
             && $this->connection->isConnected()
             && !$this->isHeartbeatTimeout();
     }
@@ -102,12 +103,12 @@ class Connection
             return false;
         }
 
-        $lastSendTime = $this->lastSendTime;
+        $lastHeartbeatTime = $this->lastHeartbeatTime;
         $currentTime = microtime(true);
-        $this->lastSendTime = $currentTime;
+        $this->lastHeartbeatTime = $currentTime;
 
-        if (isset($this->lastSendTime) && $this->lastSendTime > 0) {
-            if ($currentTime - $lastSendTime > $this->params->getHeartbeat()) {
+        if (isset($lastHeartbeatTime) && $lastHeartbeatTime > 0) {
+            if ($currentTime - $lastHeartbeatTime > $this->params->getHeartbeat()) {
                 return true;
             }
         }
