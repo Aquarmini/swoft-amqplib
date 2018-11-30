@@ -10,6 +10,7 @@
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AbstractConnection;
 use Swoftx\Amqplib\CacheManager\CacheInterface;
 use Swoftx\Amqplib\CacheManager\Memory;
 use Swoftx\Amqplib\Connection;
@@ -49,8 +50,10 @@ abstract class Message
         $this->check();
 
         if (!isset($this->channel)) {
-            /** @var AMQPSwooleConnection $conn */
-            $this->connection = $this->getConnection()->getConnection();
+            /** @var Connection $conn */
+            $conn = $this->getConnection();
+            $channelId = $conn->getChannelId();
+            $this->connection = $conn->getConnection();
             $this->channel = $this->connection->channel();
         }
 

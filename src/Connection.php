@@ -32,6 +32,9 @@ class Connection
     /** @var int */
     protected $lastSendTime = null;
 
+    /** @var int */
+    protected $channelId = 0;
+
     public static function make()
     {
         return new static();
@@ -76,6 +79,15 @@ class Connection
         return $this->connection->reconnect();
     }
 
+    public function getChannelId()
+    {
+        return $this->channelId++;
+    }
+
+    /**
+     * 检查心跳是否超时
+     * @return bool
+     */
     public function isHeartbeatTimeout(): bool
     {
         if ($this->params->getHeartbeat() === 0) {
