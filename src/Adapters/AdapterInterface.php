@@ -10,10 +10,10 @@
 namespace Swoftx\Amqplib\Adapters;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use Swoftx\Amqplib\Config;
+use Swoftx\Amqplib\ConfigInterface;
 use Swoftx\Amqplib\Params;
 
 interface AdapterInterface
 {
-    public function initConnection(Config $config, Params $params): AbstractConnection;
+    public function initConnection(ConfigInterface $config, Params $params): AbstractConnection;
 }

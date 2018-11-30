@@ -10,13 +10,13 @@
 namespace Swoftx\Amqplib\Adapters;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use Swoftx\Amqplib\Config;
+use Swoftx\Amqplib\ConfigInterface;
 use Swoftx\Amqplib\Connections\AMQPSwooleConnection;
 use Swoftx\Amqplib\Params;
 
 class SwooleAdapter implements AdapterInterface
 {
-    public function initConnection(Config $config, Params $params): AbstractConnection
+    public function initConnection(ConfigInterface $config, Params $params): AbstractConnection
     {
         return new AMQPSwooleConnection(
             $config->getHost(),

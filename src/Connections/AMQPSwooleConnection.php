@@ -43,8 +43,7 @@ class AMQPSwooleConnection extends AbstractConnection
         $read_write_timeout = 3.0,
         $keepalive = false,
         $heartbeat = 0
-    )
-    {
+    ) {
         $io = new SwooleIO($host, $port, $connection_timeout, $read_write_timeout, $keepalive, $heartbeat);
 
         parent::__construct(
