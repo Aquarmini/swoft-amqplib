@@ -1,9 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: limx
- * Date: 2018/11/30
- * Time: 5:43 PM
+ * This file is part of Swoft.
+ *
+ * @link     https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact  limingxin@swoft.org
+ * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
  */
 namespace Swoftx\Amqplib\Pool\Config;
 
@@ -26,6 +28,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var string
      */
     protected $name = '';
+
     /**
      * Minimum active number of connections
      *
@@ -33,6 +36,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var int
      */
     protected $minActive = 5;
+
     /**
      * the maximum number of active connections
      *
@@ -40,6 +44,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var int
      */
     protected $maxActive = 10;
+
     /**
      * the maximum number of wait connections
      *
@@ -47,6 +52,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var int
      */
     protected $maxWait = 20;
+
     /**
      * Maximum waiting time
      *
@@ -54,6 +60,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var int
      */
     protected $maxWaitTime = 3;
+
     /**
      * Maximum idle time
      *
@@ -61,6 +68,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var int
      */
     protected $maxIdleTime = 60;
+
     /**
      * the time of connect timeout
      *
@@ -68,6 +76,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var int
      */
     protected $timeout = 3;
+
     /**
      * the addresses of connection
      *
@@ -84,6 +93,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
     protected $uri = [
         '127.0.0.1:5672'
     ];
+
     /**
      * the user of pool
      *
@@ -91,6 +101,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var string
      */
     protected $user = 'guest';
+
     /**
      * the pass of pool
      *
@@ -98,6 +109,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @var string
      */
     protected $password = 'guest';
+
     /**
      * the vhost of pool
      *

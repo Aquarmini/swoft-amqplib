@@ -10,7 +10,6 @@
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AbstractConnection;
 use Swoftx\Amqplib\CacheManager\CacheInterface;
 use Swoftx\Amqplib\CacheManager\Memory;
 use Swoftx\Amqplib\Connection;

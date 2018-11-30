@@ -1,20 +1,19 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: limx
- * Date: 2018/11/30
- * Time: 5:47 PM
+ * This file is part of Swoft.
+ *
+ * @link     https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact  limingxin@swoft.org
+ * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
  */
 
 namespace Swoftx\Amqplib;
 
-
 use Swoft\Helper\PhpHelper;
 use Swoft\Pool\AbstractConnection;
-use PhpAmqpLib\Connection\AbstractConnection as PhpAmqpLibConnection;
 use Swoftx\Amqplib\Pool\Config\RabbitMQPoolConfig;
 use Swoftx\Amqplib\Pool\RabbitMQPool;
-use Swoftx\Amqplib\Connection;
 
 class SwoftConnection extends AbstractConnection
 {
