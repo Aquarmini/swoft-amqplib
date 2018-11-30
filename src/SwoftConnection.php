@@ -33,7 +33,7 @@ class SwoftConnection extends AbstractConnection
         $conn = new Connection();
         $conn->setConfig($config);
 
-        $this->connection = $conn;
+        $this->connection = $conn->build();
     }
 
     public function reconnect()
@@ -64,8 +64,6 @@ class SwoftConnection extends AbstractConnection
      */
     public function __call($method, $arguments)
     {
-        $this->connection->build();
-
         return PhpHelper::call([$this->connection, $method], $arguments);
     }
 }
