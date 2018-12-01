@@ -67,7 +67,7 @@ class RabbitMQPoolConfig extends PoolProperties implements ConfigInterface
      * @Value(name="${config.rabbitMQ.maxIdleTime}", env="${RABBITMQ_MAX_IDLE_TIME}")
      * @var int
      */
-    protected $maxIdleTime = 60;
+    protected $maxIdleTime = 120;
 
     /**
      * the time of connect timeout
