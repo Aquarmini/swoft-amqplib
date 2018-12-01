@@ -140,4 +140,76 @@ class Params implements ParamsInterface
     {
         return $this->heartbeat;
     }
+
+    /**
+     * @param bool $insist
+     */
+    public function setInsist(bool $insist)
+    {
+        $this->insist = $insist;
+    }
+
+    /**
+     * @param string $loginMethod
+     */
+    public function setLoginMethod(string $loginMethod)
+    {
+        $this->loginMethod = $loginMethod;
+    }
+
+    /**
+     * @param mixed $loginResponse
+     */
+    public function setLoginResponse($loginResponse)
+    {
+        $this->loginResponse = $loginResponse;
+    }
+
+    /**
+     * @param string $locale
+     */
+    public function setLocale(string $locale)
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @param float $connectionTimeout
+     */
+    public function setConnectionTimeout(float $connectionTimeout)
+    {
+        $this->connectionTimeout = $connectionTimeout;
+    }
+
+    /**
+     * @param float $readWriteTimeout
+     */
+    public function setReadWriteTimeout(float $readWriteTimeout)
+    {
+        $this->readWriteTimeout = $readWriteTimeout;
+    }
+
+    /**
+     * @param mixed $context
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * @param bool $keepalive
+     */
+    public function setKeepalive(bool $keepalive)
+    {
+        $this->keepalive = $keepalive;
+    }
+
+    /**
+     * @param mixed $heartbeat
+     */
+    public function setHeartbeat($heartbeat)
+    {
+        $this->heartbeat = $heartbeat;
+    }
 }
