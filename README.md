@@ -44,85 +44,10 @@ Swoft 框架
 ~~~php
 <?php
 
-use Swoft\Bean\Annotation\Bean;
-use Swoft\Bean\Annotation\Inject;
-use Swoftx\Amqplib\Connection as AmqpConnection;
-
-/**
- * @Bean
- */
-class SwoftConnection extends AmqpConnection
-{
-    /**
-     * @Inject
-     * @var Config
-     */
-    protected $config;
-}
-
-use Swoftx\Amqplib\ConfigInterface;
-use Swoft\Bean\Annotation\Value;
-
-/**
- * @Bean
- */
-class Config implements ConfigInterface
-{
-    /**
-     * @Value(env="${AMQP_HOST}")
-     * @var string
-     */
-    protected $host = '127.0.0.1';
-
-    /**
-     * @Value(env="${AMQP_PORT}")
-     * @var integer
-     */
-    protected $port = 5672;
-
-    /**
-     * @Value(env="${AMQP_USER}")
-     * @var string
-     */
-    protected $user = 'guest';
-
-    /**
-     * @Value(env="${AMQP_PASSWORD}")
-     * @var string
-     */
-    protected $password = 'guest';
-
-    /**
-     * @Value(env="${AMQP_VHOST}")
-     * @var string
-     */
-    protected $vhost = '/';
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getPort(): int
-    {
-        return $this->port;
-    }
-
-    public function getUser(): string
-    {
-        return $this->user;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function getVhost(): string
-    {
-        return $this->vhost;
-    }
-}
+use Swoftx\Amqplib\Message\Publisher;
+use Swoftx\Amqplib\SwoftConnection;
+use Swoftx\Amqplib\Pool\RabbitMQPool;
+use Swoft\Pool\ConnectionInterface;
 
 class DemoMessage extends Publisher
 {
@@ -131,14 +56,52 @@ class DemoMessage extends Publisher
     protected $queue = 'demo.queue';
 
     protected $routingKey = 'test';
+    
+    /** @var ConnectionInterface SwoftConnection */
+    protected $swoftConnection;
 
-    public function getConnection(): Connection
+    public function getConnection(): \Swoftx\Amqplib\Connection
     {
-        return bean(SwoftConnection::class)->build();
+        $pool = \Swoft\App::getPool(RabbitMQPool::class);
+        /** @var SwoftConnection $connection */
+        $this->swoftConnection = $pool->getConnection();
+        return $this->swoftConnection->getConnection();
+    }
+    
+    public function publish()
+    {
+        parent::publish();
+        // 释放资源 【很重要】
+        $this->swoftConnection->release(true);
     }
 }
 
 $msg = new DemoMessage();
 $msg->setData(['id' => $id]);
 $msg->publish();
+~~~
+
+Swoft 对应配置默认值
+~~~dotenv
+RABBITMQ_MIN_ACTIVE=5
+RABBITMQ_MAX_ACTIVE=10
+RABBITMQ_MAX_WAIT=20
+RABBITMQ_MAX_WAIT_TIME=3
+RABBITMQ_MAX_IDLE_TIME=120
+RABBITMQ_TIMEOUT=3
+RABBITMQ_URI=127.0.0.1:5672
+RABBITMQ_USER=guest
+RABBITMQ_PASSWORD=guest
+RABBITMQ_VHOST=/
+
+RABBITMQ_PARAMS_INSIST=false
+RABBITMQ_PARAMS_LOGIN_METHOD=AMQPLAIN
+RABBITMQ_PARAMS_LOGIN_RESPONSE=null
+RABBITMQ_PARAMS_LOCALE=en_US
+RABBITMQ_PARAMS_CONNECTION_TIMEOUT=3
+RABBITMQ_PARAMS_READ_WRITE_TIMEOUT=3
+RABBITMQ_PARAMS_CONTEXT=null
+RABBITMQ_PARAMS_KEEPALIVE=false
+RABBITMQ_PARAMS_HEARTBEAT=0
+
 ~~~

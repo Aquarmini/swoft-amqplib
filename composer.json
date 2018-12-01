@@ -32,6 +32,14 @@
         "swoft/swoole-ide-helper": "dev-master",
         "phpunit/phpunit": "^5.7",
         "phpstan/phpstan": "^0.10.5",
-        "limingxinleo/x-trait-common": "^1.1"
+        "limingxinleo/x-trait-common": "^1.1",
+        "swoft/framework": "^1.0"
+    },
+    "extra": {
+        "config-plugin": {
+            "swoft.components": [
+                "config/components.php"
+            ]
+        }
     }
 }

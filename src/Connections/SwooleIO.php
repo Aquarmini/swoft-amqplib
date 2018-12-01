@@ -1,10 +1,15 @@
 <?php
+/**
+ * This file is part of Swoft.
+ *
+ * @link     https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact  limingxin@swoft.org
+ * @license  https://github.com/swoft-cloud/swoft/blob/master/LICENSE
+ */
 namespace Swoftx\Amqplib\Connections;
 
-use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
-use PhpAmqpLib\Exception\AMQPTimeoutException;
-use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 use Swoole;
@@ -78,8 +83,7 @@ class SwooleIO extends AbstractIO
         $context = null,
         $keepalive = false,
         $heartbeat = 0
-    )
-    {
+    ) {
         if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
@@ -156,7 +160,6 @@ class SwooleIO extends AbstractIO
             }
 
             $this->buffer .= $read_buffer;
-
         } while (true);
 
 
@@ -255,7 +258,6 @@ class SwooleIO extends AbstractIO
 
         return 1;
     }
-
 
     /**
      * @return $this
