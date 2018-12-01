@@ -47,6 +47,7 @@ Swoft 框架
 use Swoftx\Amqplib\Message\Publisher;
 use Swoftx\Amqplib\SwoftConnection;
 use Swoftx\Amqplib\Pool\RabbitMQPool;
+use Swoft\Pool\ConnectionInterface;
 
 class DemoMessage extends Publisher
 {
@@ -55,13 +56,23 @@ class DemoMessage extends Publisher
     protected $queue = 'demo.queue';
 
     protected $routingKey = 'test';
+    
+    /** @var ConnectionInterface SwoftConnection */
+    protected $swoftConnection;
 
     public function getConnection(): \Swoftx\Amqplib\Connection
     {
         $pool = \Swoft\App::getPool(RabbitMQPool::class);
         /** @var SwoftConnection $connection */
-        $connection = $pool->getConnection();
-        return $connection->getConnection();
+        $this->swoftConnection = $pool->getConnection();
+        return $this->swoftConnection->getConnection();
+    }
+    
+    public function publish()
+    {
+        parent::publish();
+        // 释放资源 【很重要】
+        $this->swoftConnection->release(true);
     }
 }
 
