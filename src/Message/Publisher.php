@@ -35,7 +35,10 @@ abstract class Publisher extends Message implements PublisherInterface
         $body = $packer->pack($data);
         $msg = new AMQPMessage($body, $this->properties);
         $this->channel->basic_publish($msg, $this->exchange, $this->routingKey);
+    }
 
+    public function __destruct()
+    {
         $this->channel->close();
     }
 

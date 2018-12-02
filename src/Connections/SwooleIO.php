@@ -83,7 +83,8 @@ class SwooleIO extends AbstractIO
         $context = null,
         $keepalive = false,
         $heartbeat = 0
-    ) {
+    )
+    {
         if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
@@ -225,7 +226,9 @@ class SwooleIO extends AbstractIO
 
     public function close()
     {
-        $this->sock->close();
+        if (isset($this->sock) && $this->sock instanceof Swoole\Coroutine\Client) {
+            $this->sock->close();
+        }
         $this->sock = null;
         $this->last_read = null;
         $this->last_write = null;
