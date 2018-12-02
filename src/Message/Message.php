@@ -51,9 +51,8 @@ abstract class Message
         if (!isset($this->channel)) {
             /** @var Connection $conn */
             $conn = $this->getConnection();
-            $channelId = $conn->getChannelId();
             $this->connection = $conn->getConnection();
-            $this->channel = $this->connection->channel($channelId);
+            $this->channel = $this->connection->channel();
         }
 
         $this->declare();
