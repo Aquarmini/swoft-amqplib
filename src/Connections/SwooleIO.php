@@ -137,7 +137,7 @@ class SwooleIO extends AbstractIO
     public function read($len)
     {
         $this->check_heartbeat();
-
+        $count = 0;
         do {
             if ($len <= strlen($this->buffer)) {
                 $data = substr($this->buffer, 0, $len);
@@ -157,6 +157,9 @@ class SwooleIO extends AbstractIO
             }
 
             if ($read_buffer === '') {
+                if (5 < $count++) {
+                    throw new AMQPRuntimeException('The receiving data is empty, errno=' . $this->sock->errCode);
+                }
                 continue;
             }
 
