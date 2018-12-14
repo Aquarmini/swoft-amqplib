@@ -181,12 +181,7 @@ class SwooleIO extends AbstractIO
         $buffer = $this->sock->send($data);
 
         if ($buffer === false) {
-            // 重连后再发一次
-            $this->reconnect();
-            $buffer = $this->sock->send($data);
-            if ($buffer === false) {
-                throw new AMQPRuntimeException('Error sending data');
-            }
+            throw new AMQPRuntimeException('Error sending data');
         }
 
         if ($buffer === 0 && !$this->sock->connected) {

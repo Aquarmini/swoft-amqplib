@@ -10,6 +10,7 @@
 namespace Swoftx\Amqplib\Message;
 
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use Swoftx\Amqplib\CacheManager\CacheInterface;
 use Swoftx\Amqplib\CacheManager\Memory;
 use Swoftx\Amqplib\Connection;
@@ -52,7 +53,13 @@ abstract class Message
             /** @var Connection $conn */
             $conn = $this->getConnection();
             $this->connection = $conn->getConnection();
-            $this->channel = $this->connection->channel();
+            try {
+                $this->channel = $this->connection->channel();
+            } catch (AMQPRuntimeException $ex) {
+                // 获取channel时失败，重连Connection并获取channel
+                $this->connection->reconnect();
+                $this->channel = $this->connection->channel();
+            }
         }
 
         $this->declare();
